@@ -31,7 +31,7 @@ case "$1" in
     exec $COMMON_CMD create-letters-pdf-tasks,letter-tasks
     ;;
   api-worker-jobs)
-    exec $COMMON_CMD database-tasks,job-tasks
+    exec $COMMON_CMD database-tasks,job-tasks, database-files-tasks
     ;;
   api-worker-research)
     exec $COMMON_CMD research-mode-tasks

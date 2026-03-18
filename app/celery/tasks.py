@@ -104,6 +104,12 @@ def process_job(job_id, sender_id=None, shatter_batch_size=DEFAULT_SHATTER_JOB_R
 
     recipient_csv, template, sender_id = get_recipient_csv_and_template_and_sender_id(job)
 
+    from app.dao.template_email_files_dao import dao_get_template_email_files_by_template_id
+
+    send_file_via_ui = False
+    if dao_get_template_email_files_by_template_id(template.id):
+        send_file_via_ui = True
+
     current_app.logger.info(
         "Starting job %s processing %s notifications",
         job_id,
@@ -116,17 +122,18 @@ def process_job(job_id, sender_id=None, shatter_batch_size=DEFAULT_SHATTER_JOB_R
             get_id_task_args_kwargs_for_job_row(row, template, job, service, sender_id=sender_id)[1]
             for row in shatter_batch
         ]
-        _shatter_job_rows_with_subdivision(template.template_type, batch_args_kwargs)
+        _shatter_job_rows_with_subdivision(template.template_type, batch_args_kwargs, send_file_via_ui=send_file_via_ui)
 
     job_complete(job, start=start)
 
 
-def _shatter_job_rows_with_subdivision(template_type, args_kwargs_seq, top_level=True):
+def _shatter_job_rows_with_subdivision(template_type, args_kwargs_seq, top_level=True, send_file_via_ui=False):
     try:
         shatter_job_rows.apply_async(
             (
                 template_type,
                 args_kwargs_seq,
+                send_file_via_ui,
             ),
             queue=QueueNames.JOBS,
         )
@@ -160,22 +167,30 @@ def _shatter_job_rows_with_subdivision(template_type, args_kwargs_seq, top_level
 def shatter_job_rows(
     template_type: str,
     args_kwargs_seq: Sequence,
+    send_file_via_ui: bool,
 ):
     for task_args_kwargs in args_kwargs_seq:
-        process_job_row(template_type, task_args_kwargs)
+        process_job_row(template_type, task_args_kwargs, send_file_via_ui)
 
 
-def process_job_row(template_type, task_args_kwargs):
+def process_job_row(template_type, task_args_kwargs, send_file_by_ui=False):
     send_fn = {
         SMS_TYPE: save_sms,
         EMAIL_TYPE: save_email,
         LETTER_TYPE: save_letter,
     }[template_type]
 
-    send_fn.apply_async(
-        *task_args_kwargs,
-        queue=QueueNames.DATABASE,
-    )
+    if send_file_by_ui:
+        send_fn.apply_async(
+            *task_args_kwargs,
+            queue=QueueNames.DATABASE_FILES,
+        )
+
+    else:
+        send_fn.apply_async(
+            *task_args_kwargs,
+            queue=QueueNames.DATABASE,
+        )
 
 
 def job_complete(job, resumed=False, start=None):

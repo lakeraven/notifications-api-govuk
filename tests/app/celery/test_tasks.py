@@ -138,7 +138,7 @@ def test_should_process_sms_job(sample_job, mocker, mock_celery_task):
                 "row_number": 0,
                 "personalisation": {"phonenumber": "+441234123123"},
                 "client_reference": None,
-            }
+            },
         )
     ]
 
@@ -153,6 +153,7 @@ def test_should_process_sms_job(sample_job, mocker, mock_celery_task):
                         {},
                     )
                 ],
+                False
             ),
             queue="job-tasks",
         )
@@ -199,6 +200,7 @@ def test_should_process_sms_job_with_sender_id(sample_job, mocker, mock_celery_t
                         {"sender_id": fake_uuid},
                     )
                 ],
+                False,
             ),
             queue="job-tasks",
         )
@@ -297,6 +299,7 @@ def test_should_process_job_if_send_limits_are_not_exceeded(notify_api, notify_d
                     ((str(job.service_id), "uuid-1", "something-encoded-1"), {}),
                     ((str(job.service_id), "uuid-2", "something-encoded-2"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -308,6 +311,7 @@ def test_should_process_job_if_send_limits_are_not_exceeded(notify_api, notify_d
                     ((str(job.service_id), "uuid-4", "something-encoded-4"), {}),
                     ((str(job.service_id), "uuid-5", "something-encoded-5"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -319,6 +323,7 @@ def test_should_process_job_if_send_limits_are_not_exceeded(notify_api, notify_d
                     ((str(job.service_id), "uuid-7", "something-encoded-7"), {}),
                     ((str(job.service_id), "uuid-8", "something-encoded-8"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -328,6 +333,7 @@ def test_should_process_job_if_send_limits_are_not_exceeded(notify_api, notify_d
                 [
                     ((str(job.service_id), "uuid-9", "something-encoded-9"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -385,7 +391,7 @@ def test_should_process_email_job(email_job_with_placeholders, mocker, mock_cele
                 "row_number": 0,
                 "personalisation": {"emailaddress": "test@test.com", "name": "foo"},
                 "client_reference": None,
-            }
+            },
         )
     ]
 
@@ -403,6 +409,7 @@ def test_should_process_email_job(email_job_with_placeholders, mocker, mock_cele
                         {},
                     )
                 ],
+                False,
             ),
             queue="job-tasks",
         )
@@ -459,6 +466,7 @@ def test_should_process_email_job_with_sender_id(email_job_with_placeholders, mo
                         {"sender_id": fake_uuid},
                     )
                 ],
+                False,
             ),
             queue="job-tasks",
         )
@@ -501,7 +509,7 @@ def test_should_process_letter_job(sample_letter_job, mocker, mock_celery_task):
                     "postcode": "A_POST",
                 },
                 "client_reference": None,
-            }
+            },
         )
     ]
 
@@ -519,6 +527,7 @@ def test_should_process_letter_job(sample_letter_job, mocker, mock_celery_task):
                         {},
                     )
                 ],
+                False,
             ),
             queue="job-tasks",
         )
@@ -558,7 +567,7 @@ def test_should_process_all_sms_job(sample_job_with_placeholdered_template, mock
                 "row_number": 0,
                 "personalisation": {"phonenumber": "+441234123121", "name": "chris"},
                 "client_reference": None,
-            }
+            },
         ),
         call(
             {
@@ -569,7 +578,7 @@ def test_should_process_all_sms_job(sample_job_with_placeholdered_template, mock
                 "row_number": 1,
                 "personalisation": {"phonenumber": "+441234123122", "name": "chris"},
                 "client_reference": None,
-            }
+            },
         ),
         ANY,
         ANY,
@@ -605,6 +614,7 @@ def test_should_process_all_sms_job(sample_job_with_placeholdered_template, mock
                     ((str(service_id), "uuid-3", "something-encoded-3"), {}),
                     ((str(service_id), "uuid-4", "something-encoded-4"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -618,6 +628,7 @@ def test_should_process_all_sms_job(sample_job_with_placeholdered_template, mock
                     ((str(service_id), "uuid-8", "something-encoded-8"), {}),
                     ((str(service_id), "uuid-9", "something-encoded-9"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -708,6 +719,7 @@ def test_should_raise_exception_if_job_row_too_big(sample_job_with_placeholdered
                     ((str(service_id), "uuid-3", "something-encoded-3"), {}),
                     ((str(service_id), "uuid-4", "something-encoded-4"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -719,6 +731,7 @@ def test_should_raise_exception_if_job_row_too_big(sample_job_with_placeholdered
                     ((str(service_id), "uuid-0", "something-encoded-0"), {}),
                     ((str(service_id), "uuid-1", "something-encoded-1"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -731,6 +744,7 @@ def test_should_raise_exception_if_job_row_too_big(sample_job_with_placeholdered
                     ((str(service_id), "uuid-3", "something-encoded-3"), {}),
                     ((str(service_id), "uuid-4", "something-encoded-4"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -741,6 +755,7 @@ def test_should_raise_exception_if_job_row_too_big(sample_job_with_placeholdered
                 [
                     ((str(service_id), "uuid-2", "something-encoded-2"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -752,6 +767,7 @@ def test_should_raise_exception_if_job_row_too_big(sample_job_with_placeholdered
                     ((str(service_id), "uuid-3", "something-encoded-3"), {}),
                     ((str(service_id), "uuid-4", "something-encoded-4"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -762,6 +778,7 @@ def test_should_raise_exception_if_job_row_too_big(sample_job_with_placeholdered
                 [
                     ((str(service_id), "uuid-3", "something-encoded-3"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -864,6 +881,7 @@ def test_should_split_shatter_tasks_if_too_big_together(
                     ((str(service_id), "uuid-3", "something-encoded-3"), {}),
                     ((str(service_id), "uuid-4", "something-encoded-4"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -875,6 +893,7 @@ def test_should_split_shatter_tasks_if_too_big_together(
                     ((str(service_id), "uuid-0", "something-encoded-0"), {}),
                     ((str(service_id), "uuid-1", "something-encoded-1"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -885,6 +904,7 @@ def test_should_split_shatter_tasks_if_too_big_together(
                 [
                     ((str(service_id), "uuid-0", "something-encoded-0"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -895,6 +915,7 @@ def test_should_split_shatter_tasks_if_too_big_together(
                 [
                     ((str(service_id), "uuid-1", "something-encoded-1"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -907,6 +928,7 @@ def test_should_split_shatter_tasks_if_too_big_together(
                     ((str(service_id), "uuid-3", "something-encoded-3"), {}),
                     ((str(service_id), "uuid-4", "something-encoded-4"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -921,6 +943,7 @@ def test_should_split_shatter_tasks_if_too_big_together(
                     ((str(service_id), "uuid-8", "something-encoded-8"), {}),
                     ((str(service_id), "uuid-9", "something-encoded-9"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -1092,6 +1115,7 @@ def test_shatter_job_rows(template_type, send_fn, mock_celery_task, mocker):
                 {} if template_type == LETTER_TYPE else {"sender_id": "2"},
             ),
         ],
+        False,
     )
     assert mock_send_fn.mock_calls == [
         call(
@@ -2247,6 +2271,7 @@ def test_process_incomplete_job_sms(mocker, mock_celery_task, sample_template):
                     ((str(job.service_id), "uuid-1", "something-encoded-1"), {}),
                     ((str(job.service_id), "uuid-2", "something-encoded-2"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2258,6 +2283,7 @@ def test_process_incomplete_job_sms(mocker, mock_celery_task, sample_template):
                     ((str(job.service_id), "uuid-4", "something-encoded-4"), {}),
                     ((str(job.service_id), "uuid-5", "something-encoded-5"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2268,6 +2294,7 @@ def test_process_incomplete_job_sms(mocker, mock_celery_task, sample_template):
                     ((str(job.service_id), "uuid-6", "something-encoded-6"), {}),
                     ((str(job.service_id), "uuid-7", "something-encoded-7"), {}),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2401,6 +2428,7 @@ def test_process_incomplete_jobs_sms(mocker, mock_celery_task, sample_template):
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2433,6 +2461,7 @@ def test_process_incomplete_jobs_sms(mocker, mock_celery_task, sample_template):
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2473,6 +2502,7 @@ def test_process_incomplete_jobs_sms(mocker, mock_celery_task, sample_template):
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2489,6 +2519,7 @@ def test_process_incomplete_jobs_sms(mocker, mock_celery_task, sample_template):
                         {},
                     )
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2586,6 +2617,7 @@ def test_process_incomplete_jobs_raises_exception_if_row_too_big(mocker, mock_ce
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2603,6 +2635,7 @@ def test_process_incomplete_jobs_raises_exception_if_row_too_big(mocker, mock_ce
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2628,6 +2661,7 @@ def test_process_incomplete_jobs_raises_exception_if_row_too_big(mocker, mock_ce
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2645,6 +2679,7 @@ def test_process_incomplete_jobs_raises_exception_if_row_too_big(mocker, mock_ce
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2678,6 +2713,7 @@ def test_process_incomplete_jobs_raises_exception_if_row_too_big(mocker, mock_ce
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2702,6 +2738,7 @@ def test_process_incomplete_jobs_raises_exception_if_row_too_big(mocker, mock_ce
                         {},
                     ),
                 ],
+                False,
             ),
             queue="job-tasks",
         ),
@@ -2742,7 +2779,7 @@ def test_process_incomplete_jobs_no_notifications_added(mocker, mock_celery_task
     assert mock_shatter_job_rows.call_count == 2
 
     assert (
-        sum(len(task_args_kwargs) for _, ((_, task_args_kwargs),), *_ in mock_shatter_job_rows.mock_calls) == 10
+        sum(len(task_args_kwargs) for _, ((_, task_args_kwargs, _),), *_, in mock_shatter_job_rows.mock_calls) == 10
     )  # There are 10 in the csv file
 
 
