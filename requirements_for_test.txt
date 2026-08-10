@@ -36,12 +36,12 @@ blinker==1.9.0
     #   -r requirements.txt
     #   flask
     #   gds-metrics
-boto3==1.42.60
+boto3[crt]==1.42.60
     # via
     #   -r requirements.txt
     #   moto
     #   notifications-utils
-botocore==1.42.60
+botocore[crt]==1.42.60
     # via
     #   -r requirements.txt
     #   boto3
@@ -89,7 +89,7 @@ click-repl==0.3.0
     #   celery
 coverage==7.13.4
     # via pytest-testmon
-cryptography==46.0.5
+cryptography==50.0.0
     # via
     #   moto
     #   trustme
@@ -151,7 +151,7 @@ greenlet==3.3.2
     # via
     #   -r requirements.txt
     #   eventlet
-gunicorn==25.1.0
+gunicorn[eventlet]==25.1.0
     # via
     #   -r requirements.txt
     #   notifications-utils
