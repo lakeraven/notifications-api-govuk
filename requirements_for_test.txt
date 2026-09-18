@@ -36,12 +36,12 @@ blinker==1.9.0
     #   -r requirements.txt
     #   flask
     #   gds-metrics
-boto3==1.42.60
+boto3[crt]==1.42.60
     # via
     #   -r requirements.txt
     #   moto
     #   notifications-utils
-botocore==1.42.60
+botocore[crt]==1.42.60
     # via
     #   -r requirements.txt
     #   boto3
@@ -151,7 +151,7 @@ greenlet==3.3.2
     # via
     #   -r requirements.txt
     #   eventlet
-gunicorn==25.1.0
+gunicorn[eventlet]==25.1.0
     # via
     #   -r requirements.txt
     #   notifications-utils
@@ -370,7 +370,7 @@ smartypants==2.0.2
     # via
     #   -r requirements.txt
     #   notifications-utils
-soupsieve==2.8.3
+soupsieve==2.9
     # via beautifulsoup4
 sqlalchemy==2.0.41
     # via
